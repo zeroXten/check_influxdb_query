@@ -6,8 +6,8 @@ Plugin to check a query against InfluxDB
 Usage
 =====
 
-    $ ./check_influxdb_query.rb -h
-    Usage: ./check_influxdb_query.rb (options)
+    $ ./check-influxdb-query.rb -h
+    Usage: ./check-influxdb-query.rb (options)
         -c, --critical CRITICAL          Critical threshold expression. E.g. 'value >= 20'. See https://github.com/rubysolo/dentaku
         -d, --database DATABASE          InfluxDB database name
         -H, --host HOST                  InfluxDB host
@@ -25,7 +25,7 @@ Examples
 
 Debug mode that shows query output
 
-    $ ./check_influxdb_query.rb -q "SELECT x from test where time > now() - 1h"
+    $ ./check-influxdb-query.rb -q "SELECT x from test where time > now() - 1h"
     Debug output. Use -j to check value...
     {
       "test": [
@@ -40,22 +40,22 @@ Debug mode that shows query output
 
 Select the latest x value
 
-    $ ./check_influxdb_query.rb -q "SELECT x from test where time > now() - 1h limit 1" -j '$.test..x'
+    $ ./check-influxdb-query.rb -q "SELECT x from test where time > now() - 1h limit 1" -j '$.test..x'
     CheckInfluxdbQuery OK: Value '10' ok for query 'SELECT x from test where time > now() - 1h limit 1'
 
 Add a warning threshold
 
-    $ ./check_influxdb_query.rb -q "SELECT x from test where time > now() - 1h limit 1" -j '$.test..x' -w 'value >= 5'
+    $ ./check-influxdb-query.rb -q "SELECT x from test where time > now() - 1h limit 1" -j '$.test..x' -w 'value >= 5'
     CheckInfluxdbQuery WARNING: Value '10' matched 'value >= 5' for query 'SELECT x from test where time > now() - 1h limit 1'
 
 Add a critical threshold
 
-    $ ./check_influxdb_query.rb -q "SELECT x from test where time > now() - 1h limit 1" -j '$.test..x' -w 'value >= 5' -c 'value >= 7'
+    $ ./check-influxdb-query.rb -q "SELECT x from test where time > now() - 1h limit 1" -j '$.test..x' -w 'value >= 5' -c 'value >= 7'
     CheckInfluxdbQuery CRITICAL: Value '10' matched 'value >= 7' for query 'SELECT x from test where time > now() - 1h limit 1'
 
 Go critical on no results
 
-    $ ./check_influxdb_query.rb -q "SELECT x from test where time > now() - 5m limit 1" -j '$.test..x' --noresult
+    $ ./check-influxdb-query.rb -q "SELECT x from test where time > now() - 5m limit 1" -j '$.test..x' --noresult
     CheckInfluxdbQuery CRITICAL: No result for query 'SELECT x from test where time > now() - 5m limit 1'
 
 References
