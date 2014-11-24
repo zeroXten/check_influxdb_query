@@ -1,5 +1,20 @@
 #!/usr/bin/env ruby
 
+#
+# Check InfluxDB queries
+# ===
+#
+# Dependencies
+# -----------
+# - InfluxDB client gem `influxdb` - used to query influxdb
+# - JsonPath gem `jsonpath` - used to select result values
+# - Dentaku gen `dentaku` - used to express thresholds
+#
+# Copyright 2014, Fraser Scott <fraser.scott@gmail.com>
+#
+# Released under the same terms as Sensu (the MIT license); see LICENSE
+# for details.
+
 require 'influxdb'
 require 'sensu-plugin/check/cli'
 require 'json'
