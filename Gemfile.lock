@@ -1,0 +1,23 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    dentaku (1.2.1)
+    influxdb (0.1.8)
+      json
+    json (1.8.1)
+    jsonpath (0.5.6)
+      multi_json
+    mixlib-cli (1.5.0)
+    multi_json (1.10.1)
+    sensu-plugin (1.1.0)
+      json
+      mixlib-cli (>= 1.1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  dentaku
+  influxdb
+  jsonpath
+  sensu-plugin
