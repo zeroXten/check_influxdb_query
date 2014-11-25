@@ -10,6 +10,10 @@
 # - JsonPath gem `jsonpath` - used to select result values
 # - Dentaku gen `dentaku` - used to express thresholds
 #
+# Examples
+# --------
+# See the README here https://github.com/zeroXten/check_influxdb_query
+#
 # Copyright 2014, Fraser Scott <fraser.scott@gmail.com>
 #
 # Released under the same terms as Sensu (the MIT license); see LICENSE
@@ -61,6 +65,12 @@ class CheckInfluxdbQuery < Sensu::Plugin::Check::CLI
     :required => true,
     :description => "Query to run. See http://influxdb.com/docs/v0.8/api/query_language.html"
 
+  option :alias,
+    :short => "-a ALIAS",
+    :long => "--alias ALIAS",
+    :default => nil,
+    :description => "Alias of query (e.g. if query and output gets too long)"
+
   option :jsonpath,
     :short => "-j JSONPATH",
     :long => "--jsonpath JSONPATH",
@@ -104,6 +114,7 @@ class CheckInfluxdbQuery < Sensu::Plugin::Check::CLI
     :exit => 0
 
   def run
+
     influxdb = InfluxDB::Client.new config[:database], 
       :host => config[:host], 
       :port => config[:port],
@@ -111,8 +122,15 @@ class CheckInfluxdbQuery < Sensu::Plugin::Check::CLI
       :password => config[:password]
 
     value = influxdb.query config[:query]
+
+    if config[:alias]
+      query_name = config[:alias]
+    else
+      query_name = config[:query]
+    end
+
     if config[:noresult] and value.empty?
-      critical "No result for query '#{config[:query]}'"
+      critical "No result for query '#{query_name}'"
     end
 
     if config[:jsonpath]
@@ -121,11 +139,11 @@ class CheckInfluxdbQuery < Sensu::Plugin::Check::CLI
 
       calc = Dentaku::Calculator.new
       if config[:critical] and calc.evaluate(config[:critical], value: value)
-        critical "Value '#{value}' matched '#{config[:critical]}' for query '#{config[:query]}'"
+        critical "Value '#{value}' matched '#{config[:critical]}' for query '#{query_name}'"
       elsif config[:warning] and calc.evaluate(config[:warning], value: value)
-        warning "Value '#{value}' matched '#{config[:warning]}' for query '#{config[:query]}'"
+        warning "Value '#{value}' matched '#{config[:warning]}' for query '#{query_name}'"
       else
-        ok "Value '#{value}' ok for query '#{config[:query]}'"
+        ok "Value '#{value}' ok for query '#{query_name}'"
       end
     else
       puts "Debug output. Use -j to check value..."
